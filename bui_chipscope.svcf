@@ -1,0 +1,681 @@
+# SimVision Command Script (Mon Oct 16 01:42:25 PM MSK 2017)
+#
+# Version 12.10.s016
+#
+# You can restore this configuration with:
+#
+#     simvision -input /home/kurochkin/simvision_dumps/bui_chipscope.svcf
+#
+
+
+#
+# Preferences
+#
+preferences set toolbar-Standard-WatchWindow {
+  usual
+  shown 0
+}
+preferences set toolbar-SimControl-WatchList {
+  usual
+  hide set_break
+}
+preferences set expand-userbits {18 21 11 10 9}
+preferences set txe-locate-add-fibers 1
+preferences set signal-type-colors {
+	group #0099FF
+	overlay #0099FF
+	input #FFFF00
+	output #FFA500
+	inout #00FFFF
+	internal #00FF00
+	fiber #FF99FF
+	errorsignal #FF0000
+	assertion #FF0000
+	unknown #FFFFFF
+}
+preferences set seq-time-width 30
+preferences set txe-navigate-search-locate 0
+preferences set txe-view-hold 0
+preferences set toolbar-SimControl-WaveWindow {
+  usual
+  position -row 1 -pos 0
+}
+preferences set sb-editor-command {wordpad %F}
+preferences set toolbar-CursorControl-WaveWindow {
+  usual
+  position -row 0 -pos 4
+}
+preferences set toolbar-Windows-WatchWindow {
+  usual
+  shown 0
+}
+preferences set txe-navigate-waveform-locate 1
+preferences set txe-view-hidden 0
+preferences set waveform-print-paper {A4 (210mm x 297mm)}
+preferences set toolbar-Windows-SchematicWindow {
+  usual
+  position -pos 2
+}
+preferences set txe-search-show-linenumbers 1
+preferences set toolbar-OperatingMode-WaveWindow {
+  usual
+  position -pos 3
+  name OperatingMode
+}
+preferences set plugin-enable-svdatabrowser 0
+preferences set toolbar-NavSignalList-WaveWindow {
+  usual
+  position -pos 2
+}
+preferences set toolbar-Standard-WaveWindow {
+  usual
+  position -pos 1 -anchor e
+}
+preferences set plugin-enable-groupscope 0
+preferences set sb-history-size 10
+preferences set key-bindings {
+	Edit>Undo "Ctrl+Z"
+	Edit>Redo "Ctrl+Y"
+	Edit>Copy "Ctrl+C"
+	Edit>Cut "Ctrl+X"
+	Edit>Paste "Ctrl+V"
+	Edit>Delete "Del"
+        Select>All "Ctrl+A"
+        Edit>Select>All "Ctrl+A"
+        Edit>SelectAll "Ctrl+A"
+      	openDB "Ctrl+O"
+        Simulation>Run "F2"
+        Simulation>Next "F6"
+        Simulation>Step "F5"
+        #Schematic window
+        View>Zoom>Fit "Alt+="
+        View>Zoom>In "Alt+I"
+        View>Zoom>Out "Alt+O"
+        #Waveform Window
+	View>Zoom>InX "Alt+I"
+	View>Zoom>OutX "Alt+O"
+	View>Zoom>FullX "Alt+="
+	View>Zoom>InX_widget "I"
+	View>Zoom>OutX_widget "O"
+	View>Zoom>FullX_widget "="
+	View>Zoom>FullY_widget "Y"
+	View>Zoom>Cursor-Baseline "Alt+Z"
+	View>Center "Alt+C"
+	View>ExpandSequenceTime>AtCursor "Alt+X"
+	View>CollapseSequenceTime>AtCursor "Alt+S"
+	Edit>Create>Group "Ctrl+G"
+	Edit>Ungroup "Ctrl+Shift+G"
+	Edit>Create>Marker "Ctrl+M"
+	Edit>Create>Condition "Ctrl+E"
+	Edit>Create>Bus "Ctrl+W"
+	Explore>NextEdge "Ctrl+]"
+	Explore>PreviousEdge "Ctrl+["
+	ScrollRight "Right arrow"
+	ScrollLeft "Left arrow"
+	ScrollUp "Up arrow"
+	ScrollDown "Down arrow"
+	PageUp "PageUp"
+	PageDown "PageDown"
+	TopOfPage "Home"
+	BottomOfPage "End"
+}
+preferences set plugin-enable-interleaveandcompare 0
+preferences set toolbar-SimControl-WatchWindow {
+  usual
+  hide set_break
+  shown 0
+}
+preferences set toolbar-Windows-WaveWindow {
+  usual
+  position -pos 0
+}
+preferences set txe-navigate-waveform-next-child 1
+preferences set waveform-space 3
+preferences set toolbar-Edit-WatchWindow {
+  usual
+  shown 0
+}
+preferences set toolbar-WaveZoom-WaveWindow {
+  usual
+  position -row 0 -pos 5 -anchor w
+}
+preferences set sb-syntax-extensions-systemc {.h .hpp .cc .cpp .CC}
+preferences set txe-locate-scroll-x 1
+preferences set txe-locate-scroll-y 1
+preferences set toolbar-CursorControl-WatchWindow {
+  usual
+  position -row 0
+}
+preferences set transaction-height 4
+preferences set txe-locate-pop-waveform 1
+preferences set toolbar-TimeSearch-WatchWindow {
+  usual
+  shown 0
+}
+
+#
+# PPE data
+#
+array set dbNames ""
+set dbNames(realName1) [database require waves -search {
+	./waves.shm/waves.trn
+	/home/kurochkin/router_v4_for_temp/trunk/hw_debug/pcie_speed_test_router_top/scripts/waves.shm/waves.trn
+}]
+
+#
+# Mnemonic Maps
+#
+mmap new -reuse -name {Boolean as Logic} -radix %b -contents {{%c=FALSE -edgepriority 1 -shape low}
+{%c=TRUE -edgepriority 1 -shape high}}
+mmap new -reuse -name {Example Map} -radix %x -contents {{%b=11???? -bgcolor orange -label REG:%x -linecolor yellow -shape bus}
+{%x=1F -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=2C -bgcolor red -label ERROR -linecolor white -shape EVENT}
+{%x=* -label %x -linecolor gray -shape bus}}
+
+#
+# Design Browser windows
+#
+if {[catch {window new WatchList -name "Design Browser 1" -geometry 947x552+575+303}] != ""} {
+    window geometry "Design Browser 1" 947x552+575+303
+}
+window target "Design Browser 1" on
+browser using {Design Browser 1}
+browser set -scope  {waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui} 
+browser set \
+    -signalsort name
+browser yview see  {waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui} 
+browser timecontrol set -lock 0
+
+#
+# Waveform windows
+#
+if {[catch {window new WaveWindow -name "Waveform 1" -geometry 1010x600+484+204}] != ""} {
+    window geometry "Waveform 1" 1010x600+484+204
+}
+window target "Waveform 1" on
+waveform using {Waveform 1}
+waveform sidebar visibility partial
+waveform set \
+    -primarycursor TimeA \
+    -signalnames name \
+    -signalwidth 175 \
+    -units ps \
+    -valuewidth 75
+waveform baseline set -time 0
+
+set id [waveform add -signals  {
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ADDRW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.AUR_CFGINT_WTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.BARW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.BASQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.BUIP_ADDRW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_RDSR}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_READ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_WRDI}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_WREN}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_WRITE}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CMD_WRSR}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CORE_CS_WTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CORE_INPUT_REG}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.CORE_IO_INPUT_REG}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.DEST_NUM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.DIM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.DIR_REG_WDT}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ELB_AW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ELB_DW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ELB_MS}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ERGQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.EXCQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.EXC_VEC_PTR_W}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.FI_ADR_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.FLIT_PRECISION}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.FSAW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.IO_ADDRW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.IO_PCIENUM_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.JTAG_CMD_RG_WHT}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.JTAG_DATA_RG_WHT}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.MC_CFGINT_WTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.MSIX_PBA_OFFSET}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.MSIX_TABLE_OFFSET}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.NUMVFSW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.OP_TYPE_HI}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.OP_TYPE_LO}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PARCHK}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIEQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_BARHW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_CBSNW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_CDVNW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_CFGINT_WTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_CFNNW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PCIE_NUM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PEPQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PIPE_ALLOC_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PKT_PCIENUM_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.PPQW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.RAW_CREDIT_WTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.RDBW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.REMW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.RGDBW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ROUTER_VERSION}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SLOW_INT_NUM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SOURCE_NUM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SPL_AW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SPL_DW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SUBB_CS_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SUBB_IOADDR_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SUBB_NUM_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.SUM_PEPQ}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.TAGW}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.TCK_LO_LEN}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.TCK_UP_LEN}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.TO_PCIE}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.TRN_CLK_HPER}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.VF_MAX_NUM}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.VF_MAX_NUM_W}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.WR_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.XBAR_DATA_WIDTH}
+	{simulator::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.XBAR_IODATA_WIDTH}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.arb_data_pack[711:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.arb_eop[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.arb_rdy[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.arb_req[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.arb_sop[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.base_dma_addr[44:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_bcs[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_cmpl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_csCBGRA}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_csCBGRD}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_data_granul_64}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_dummy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_except_event[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_int}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_addr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_long_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_mem_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_nposted_skip}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_nposted_val[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_raw_hdr_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_raw_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_rsp_mask[0:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.bui_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_ack_2jtag}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_buij_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_cmpl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_data_2jtag[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_except_event[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_hbuf_ctrl_rg[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_hdr_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_io_addr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_io_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_long_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_mem_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_raw_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_tag_i[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buij_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_cmpl_receive_tout[15:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_cmpl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_dir_s[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_except_event[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_ext_reg[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_fetch_fn_num[0:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_fetch_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_fetch_rg}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_fetch_rg_num[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_io_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_ioaddr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_long_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_mem_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_pfcnt_adr_err_cnt[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_pfcnt_dmareadlatency_cnt[47:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_raw_addr_msk[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_raw_hdr_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_raw_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_sum_strobe[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_tag_i[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buip_wr_2spl[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buir_fatal_error}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buir_fixed_error}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buir_io_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.buir_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_adr[12:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_core_dir}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_eop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_io_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_mem_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_sop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cbg_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cfg_bus_number[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cfg_data_2bui[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cfg_device_number[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cfg_dsn[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.cfg_function_number[2:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_clk}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_data_2arb[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_data_s[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_dir_s[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_fifo_fatal_error}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_fifo_fixed_error}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_io_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_io_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_raw_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_raw_rdy_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_route_rg[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_tag_o[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_tag_r[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_tag_s[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_use_dir_reg}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_use_dir_reg_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_use_rg_flag}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_2arb}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_eop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_eop_2arb}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_eop_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_sop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_sop_2arb}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.core_wr_sop_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.credit_delta[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.credit_en[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.credit_gran[5:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.debug_rg_o[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elb_mux_addr_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elb_mux_data_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elb_mux_enabled_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elb_mux_rd_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elb_mux_wr_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elba_addr_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elba_data_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elba_enabled_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elba_rd_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elba_wr_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elbi_addr_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elbi_data_2spl[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elbi_enabled_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elbi_rd_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.elbi_wr_2spl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.glb_sram_re}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.glb_sram_we}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.host_amo}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_core_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_dummy[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_host_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_io_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_iodata_val}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2buij_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_core_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_dummy[9:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_host_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_host_wr_fl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_io_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_iodata[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_iodata_val}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2lfmux_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_dummy[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_eop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_io_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_iodata_val}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_sop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2pcie_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_core_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_dummy[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_host_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_host_wr_fl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_io_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_iodata_val}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub2spl_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_2buij_host_wr_fl}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_2spl_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_addr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_bcs[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_fn_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_rdata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_rdata_val[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_rdy[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.hub_trn_ckf[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ignore_raw_pack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ihdl_64k_tick}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ihdl_except_num[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ihdl_interrupt}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ihdl_pfcnt_en}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.ihdl_pfcnt_sclr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_data_pack[711:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_dir[15:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_eop[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_io_addr[51:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_io_req[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_iodata_pack[255:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_rdy[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_req[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.indr_sop[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_addr[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_data[15:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_enable}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_mask[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_mm[2:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_pba[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msi_update_pba}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_address[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_enable}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_int}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_mask}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_sent}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_vf_enable[0:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.int_msix_vf_mask[0:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.iodata_rdy_2hub[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.jtag_addr_2buij[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.jtag_data_2buij[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.jtag_idata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.jtag_rd_2buij}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.jtag_wr_2buij}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lf_dir_rg[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lf_io_dir_rg[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lf_route_rg[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_addr[51:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_cmpl_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_data[255:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_eop[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_hdr_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_io_rd[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_io_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_ioaddr[43:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_iodata[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_long_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_loop_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_mem_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_raw_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_rdy[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_sop[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_tag[9:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfint2lfmux_tag_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_core_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_host_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_io_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_iodata_val}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2buij_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2cbg_core_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2cbg_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2cbg_eop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2cbg_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2cbg_sop}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_cmpl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_hdr_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_ioaddr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_long_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_loop_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_mem_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_raw_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2hub_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_addr[51:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_core_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_data[255:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_eop[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_host_wr[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_io_rdy[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_iodata[63:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_iodata_val[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_rdy[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_sop[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_tag[9:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux2lfint_tag_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux_dir_s[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux_sum_strobe[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux_use_dir_reg}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux_use_dir_reg_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.lfmux_use_rg_flag}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.max_offset[28:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.max_tlp_size[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.msix_io_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.msix_iodata[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pcie_int_ack}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pcie_numvfs[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pcie_route_rg[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pcie_use_rg_flag}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pcie_vf_offset[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.pe_fresp_ptr[175:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.rst_n_2bui}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.rst_n_2buip}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.rst_n_pipe}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_ack_2elb_mux}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_ack_2elba}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_ack_2elbi}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_addr[25:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_cmpl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_data[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_data_2elb_mux[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_data_2elba[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_data_2elbi[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_dir_rg[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_dir_s[3:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_eop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_except_event[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_hbuf_ctrl_rg[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_hdr_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_io_addr[21:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_io_data[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_io_rd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_io_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_irq_2elba}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_irq_2elbi}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_long_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_mem_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_raw_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_route_rg[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_sop[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_spl_wr[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_sum_strobe[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_tag_i[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_tag_wr}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_use_dir_reg}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_use_dir_reg_s}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.spl_use_rg_flag}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.switch_io_data_rd[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.switch_io_data_wr[31:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.switch_tag[4:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rbar_hit[6:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rd[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rdst_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_recrc_err}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_reof}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rerr_fwd}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rfunc_num[7:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rrem[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rsof}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rsrc_dsc}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_rsrc_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_td[127:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tdst_dsc}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tdst_rdy}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_teof}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tnp_ok}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_trem[1:0]}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tsof}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tsrc_dsc}
+	{waves::mq_pipe_testbench.bui_equipment.pcie_speed_test_top.bui_wrapper.bui_gen[0].bui.trn_tsrc_rdy}
+	} ]
+
+waveform xview limits 0 2000ps
+
+#
+# Waveform Window Links
+#
+
+#
+# Console windows
+#
+console set -windowname Console
+window geometry Console 600x250+712+0
+
